@@ -1,6 +1,6 @@
 # Output image files
-img/weather_out.*
-img/weather.png*
+weather/img/weather_out.*
+weather/img/weather.png*
 
 # Created by https://www.gitignore.io/api/python,vim,osx,windows
 
