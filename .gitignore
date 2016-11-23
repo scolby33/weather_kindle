@@ -22,7 +22,7 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
+# lib/  # I actually mean to ship some things in lib/
 lib64/
 parts/
 sdist/
