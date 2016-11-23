@@ -14,9 +14,6 @@ mv img/weather_out.svg img/weather_out.svg.old
 mv img/weather_out.png img/weather_out.png.old
 mv img/weather.png img/weather.png.old
 
-# add libraries to path
-export LD_LIBRARY_PATH=/mnt/us/weather/lib
-
 # downloads the weather and outputs to img/weather_out.svg
 /mnt/us/weather/bin/download_weather.py --rotated --template img/weather_template.svg ${ZIP} > img/weather_out.svg
 
