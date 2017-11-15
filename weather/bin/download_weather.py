@@ -25,6 +25,8 @@ import string
 import sys
 import xml.etree.ElementTree as ET
 
+sys.path.insert(0, '../lib')
+
 from docopt import docopt
 
 ZIP_URL = 'http://graphical.weather.gov/xml/sample_products/browser_interface/ndfdBrowserClientByDay.php?zipCodeList={zip}&format=24+hourly&numDays=4&Unit=e'
