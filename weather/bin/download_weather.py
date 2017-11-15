@@ -114,8 +114,6 @@ class WeatherGovGetter(WeatherGetter):
         if not self._icons:
             self._icons = [icon_elem.text.split('/')[-1].split('.')[0].rstrip('0123456789')
                            for icon_elem in self._weather.iter(tag='icon-link')]
-        sys.stderr.write(str(self._icons))
-        sys.stderr.flush()
         return self._icons
         
     @property
@@ -186,9 +184,6 @@ class WundergroundGetter(WeatherGetter):
             icons = [day['icon'] for
                      day in self._weather['forecast']['simpleforecast']['forecastday']]
             self._icons = [self._icon_mapping[icon] for icon in icons]
-        sys.stderr.write(str(icons) + '\n')
-        sys.stderr.write(str(self._icons))
-        sys.stderr.flush()
         return self._icons
         
     @property    
