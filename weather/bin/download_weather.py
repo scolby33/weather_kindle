@@ -84,7 +84,7 @@ class WeatherGovGetter(WeatherGetter):
         if isinstance(self.location, tuple):
             lat, lon = self.location
             with closing(urllib2.urlopen(LATLON_URL.format(lat=lat, lon=lon))) as weather_xml:
-                self._weather_data = ET.parse(weather_xmk)
+                self._weather_data = ET.parse(weather_xml)
         else:
             with closing(urllib2.urlopen(ZIP_URL.format(zip=self.location))) as weather_xml:
                 self._weather_data = ET.parse(weather_xml)
