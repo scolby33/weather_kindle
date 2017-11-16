@@ -26,6 +26,7 @@ from itertools import count, izip
 import json
 import os
 import urllib2
+import ssl
 import string
 import sys
 import xml.etree.ElementTree as ET
@@ -40,8 +41,8 @@ sys.path.insert(
 
 from docopt import docopt
 
-ZIP_URL = 'http://graphical.weather.gov/xml/sample_products/browser_interface/ndfdBrowserClientByDay.php?zipCodeList={zip}&format=24+hourly&numDays=4&Unit=e'
-LATLON_URL = 'http://graphical.weather.gov/xml/sample_products/browser_interface/ndfdBrowserClientByDay.php?lat={lat}&lon={lon}&format=24+hourly&numDays=4&Unit=e'
+ZIP_URL = 'https://graphical.weather.gov/xml/sample_products/browser_interface/ndfdBrowserClientByDay.php?zipCodeList={zip}&format=24+hourly&numDays=4&Unit=e'
+LATLON_URL = 'https://graphical.weather.gov/xml/sample_products/browser_interface/ndfdBrowserClientByDay.php?lat={lat}&lon={lon}&format=24+hourly&numDays=4&Unit=e'
 WU_URL = 'https://api.wunderground.com/api/{key}/conditions/forecast/q/{location}.json'
 
 class WeatherGetter(object):
@@ -90,10 +91,10 @@ class WeatherGovGetter(WeatherGetter):
     def _update_weather(self):
         if isinstance(self.location, tuple):
             lat, lon = self.location
-            with closing(urllib2.urlopen(LATLON_URL.format(lat=lat, lon=lon))) as weather_xml:
+            with closing(urllib2.urlopen(LATLON_URL.format(lat=lat, lon=lon), context=ssl._create_unverified_context())) as weather_xml:
                 self._weather_data = ET.parse(weather_xml)
         else:
-            with closing(urllib2.urlopen(ZIP_URL.format(zip=self.location))) as weather_xml:
+            with closing(urllib2.urlopen(ZIP_URL.format(zip=self.location), context=ssl._create_unverified_context())) as weather_xml:
                 self._weather_data = ET.parse(weather_xml)
         
         super(WeatherGovGetter, self)._update_weather()
@@ -167,7 +168,7 @@ class WundergroundGetter(WeatherGetter):
         super(WundergroundGetter, self).__init__(location)
         
     def _update_weather(self):
-        with closing(urllib2.urlopen(WU_URL.format(key=self._key, location=self.location))) as weather_json:
+        with closing(urllib2.urlopen(WU_URL.format(key=self._key, location=self.location), context=ssl._create_uverified_context())) as weather_json:
             self._weather_data = json.load(weather_json)
             if self._weather['response'].get('error', None):
                 raise ValueError('Bad key `{}` supplied!'.format(self._key))
