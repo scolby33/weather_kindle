@@ -162,6 +162,8 @@ class WundergroundGetter(WeatherGetter):
     def _update_weather(self):
         with closing(urllib2.urlopen(WU_URL.format(key=self._key, location=self.location))) as weather_json:
             self._weather_data = json.load(weather_json)
+            if self._weather['response'].get('error', None):
+                raise ValueError('Bad key `{}` supplied!'.format(self._key))
         super(WundergroundGetter, self)._update_weather()
         
     @property
