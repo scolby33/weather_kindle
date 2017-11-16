@@ -1,0 +1,54 @@
+{
+    "comment001": "Weather Kindle KUAL companion",
+    "comment002": "",
+    "comment003": "It serves as a cheap configuration UI for the various ways the hack can be customized",
+    "comment004": "",
+    "items": [
+        {
+            "name": "Weather",
+            "priority": -1,
+            "items": [
+                {
+                    "name": "Install in Crontab",
+                    "action": "./bin/weatherctl.sh",
+                    "params": "install",
+                    "exitmenu": false,
+                    "checked": false,
+                    "refresh": false,
+                    "status": false,
+                    "internal": "status Install the hourly update script in the Crontab"
+                },
+                {
+                    "name": "Remove from Crontab",
+                    "action": "./bin/weatherctl.sh",
+                    "params": "uninstall",
+                    "exitmenu": false,
+                    "checked": false,
+                    "refresh": false,
+                    "status": false,
+                    "internal": "status Remove the hourly update script from the Crontab"
+                },
+                {
+                    "name": "Installation Status",
+                    "action": "./bin/weatherctl.sh",
+                    "params": "status",
+                    "exitmenu": false,
+                    "checked": false,
+                    "refresh": false,
+                    "status": false,
+                    "internal": "status Show if Crontab entry is installed"
+                },
+                {
+                    "name": "Start Weather Display",
+                    "action": "./bin/weatherctl.sh",
+                    "params": "start",
+                    "exitmenu": true,
+                    "checked": false,
+                    "refresh": false,
+                    "status": false,
+                    "internal": "status Go into full-screen weather mode."
+                }
+            ]
+        }
+    ]
+}
