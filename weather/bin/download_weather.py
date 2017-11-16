@@ -24,12 +24,19 @@ from datetime import datetime, timedelta
 import io
 from itertools import count, izip
 import json
+import os
 import urllib2
 import string
 import sys
 import xml.etree.ElementTree as ET
 
-sys.path.insert(0, '../lib')
+sys.path.insert(
+    0,
+    os.path.realpath(os.path.join(
+        os.path.dirname(os.path.realpath(sys.argv[0])),
+        '../lib'
+    ))
+)
 
 from docopt import docopt
 
