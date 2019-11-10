@@ -4,29 +4,30 @@
 
 # Uncomment if you want the output roated 180 degrees
 # i.e. if you mounted your Kindle upside down
-# This variable is checked for being set or unset;
+# This variable is checked for being set and not null;
 # the value does not matter. For example,
-# `ROTATED=0` would also count as set.
-#ROTATED=1
+# `ROTATED="0"` would also count as set. `ROTATED=""` would
+# count as unset.
+#ROTATED="1"
 
-##################################################
-# Uncomment and set ONE of the following options #
-##################################################
+###################################################################
+# Uncomment and set ALL the options for ONE of the sections below #
+###################################################################
 
 #----------------------------#
 # Weather.gov using ZIP code #
 #----------------------------#
 # Only works in the US
 
-ZIP=10001
+ZIP="10001"
 
 #------------------------------------------#
 # Weather.gov using Latitude and Longitude #
 #------------------------------------------#
 # Only works in the US
 
-#LAT=40.7515634
-#LON=-74.0047868
+#LAT="40.7515634"
+#LON="-74.0047868"
 
 #-------------#
 # AccuWeather #
@@ -36,7 +37,7 @@ ZIP=10001
 # Get an API key from https://www.developer.accuweather.com.
 # A free "Limited Trial" plan seems to be sufficient.
 # Fill that value in here
-#KEY=12345
+#KEY="12345"
 
 # Find the "location key" for your location.
 # This can be found by viewing the source of the AccuWeather page
@@ -47,12 +48,13 @@ ZIP=10001
 # https://developer.accuweather.com/accuweather-locations-api/apis
 # You'll only need to do this once, so using the online form from the
 # documentation should be sufficient.
-#LOCATION=349727
+#LOCATION="349727"
 
 # Uncomment if you want metric units
 # (Celsius instead of Farhenheit)
 # Only works with AccuWeather
-# This variable is checked for being set or unset;
+# This variable is checked for being set and not null;
 # the value does not matter. For example,
-# `ROTATED=0` would also count as set.
-#METRIC=1
+# `METRIC="0"` would also count as set. `METRIC=""` would
+# count as unset.
+#METRIC="1"
