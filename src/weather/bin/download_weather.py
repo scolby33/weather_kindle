@@ -79,6 +79,8 @@ NOMESSAGE = object()
 
 ZIP_RE = re.compile(r"(?P<zip>[0-9]{5})(?:-[0-9]{4})?")
 
+SSL_CONTEXT = ssl.create_default_context(cafile=str((HERE / Path("../etc/ssl/certs/cacert.pem")).resolve()))
+
 logging.basicConfig(stream=sys.stderr, format="%(levelname)s@%(asctime)s: %(message)s")
 logging.captureWarnings(True)
 logger = logging.getLogger(__name__)
@@ -190,7 +192,7 @@ class WeatherGovGetter(WeatherGetter):
         try:
             with closing(
                 urllib.request.urlopen(
-                    forecast_request, context=ssl.create_default_context()
+                    forecast_request, context=SSL_CONTEXT
                 )
             ) as weather_resp:
                 resp_code = weather_resp.getcode()
@@ -316,7 +318,7 @@ class AccuWeatherGetter(WeatherGetter):
         try:
             with closing(
                 urllib.request.urlopen(
-                    forecast_request, context=ssl.create_default_context()
+                    forecast_request, context=SSL_CONTEXT
                 )
             ) as weather_resp:
                 resp_code = weather_resp.getcode()
