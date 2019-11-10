@@ -49,8 +49,13 @@ I am currently in the process of packaging this up as a Kindle "update" for easi
 
 # License
 
-The portions of this software created by Scott Colby are licensed under the MIT License. The weather image template and icons, which were originally created by Matthew Petroff, are used under the CC0 Public Domain Dedication. My modifications to the weather image template are also dedicated to the public under the CC0 Public Domain Dedication.
+The weather image template and icons, which were originally created by Matthew Petroff, are used under the CC0 Public Domain Dedication. My modifications to the weather image template are also dedicated to the public under the CC0 Public Domain Dedication. The original source is found at https://github.com/mpetroff/kindle-weather-display.
 
 RSVG is used under the terms of the GNU General Public License. There have been no modifications to RSVG as obtained from the original creators.
 
 Pngcrush is used under the terms of the Pngcrush license, which allows for use and distribution of the program with no fee. There have been no modifications to Pngcrush as obtained from the original creators.
+
+The remainder of weather_kindle is Copyright (c) 2019 Scott Colby and is available under the MIT license.
+
+See the [LICENSE.md](LICENSE.md) file for the full text of the license.
+
