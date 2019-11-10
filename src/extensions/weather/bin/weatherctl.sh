@@ -1,61 +1,72 @@
 #!/bin/sh
 
-HACKNAME="${PWD##/mnt/us/extensions/}"
-
 _FUNCTIONS=/etc/rc.d/functions
 [ -f ${_FUNCTIONS} ] && . ${_FUNCTIONS}
 
-MY_SCREEN_SIZE="${SCREEN_X_RES}x${SCREEN_Y_RES}"
-EIPS_MAXCHARS="$((${SCREEN_X_RES} / ${EIPS_X_RES}))"
-EIPS_MAXLINES="$((${SCREEN_Y_RES} / ${EIPS_Y_RES}))"
+EIPS_MAXLINES=$((SCREEN_Y_RES / EIPS_Y_RES))
 
+INIT_WEATHER="/mnt/us/weather/bin/init_weather.sh"
+
+CRONTAB="/etc/crontab/root"
+CRONTAB_SIGIL="__WEATHER_AUTO__"
+CRONTAB_LINE="0 * * * * /mnt/us/weather/bin/update_weather.sh  # update the weather display at the top of every hour $CRONTAB_SIGIL"
+
+
+_msg() {
+    # print a message one line from the bottom of the screen
+    eips 0 $((EIPS_MAXLINES - 2)) "$1" > /dev/null
+}
+
+_installed() {
+    # check if we're installed in the crontab
+    # returns 0 if installed, 1 if not installed
+    grep -q "$CRONTAB_SIGIL" "$CRONTAB"
+}
+
+status() {
+    # print crontab installation status to the screen
+    if _installed; then
+        _msg "  Crontab installed"
+    else
+        _msg "  Crontab not installed"
+    fi
+}
 
 install() {
-    if status
-    then
+    # add line to crontab if not already present
+    if ! _installed; then
         mntroot rw
-        echo "0 * * * * /mnt/us/weather/bin/update_weather.sh # update the weather display at the top of every hour" >> /etc/crontab/root
+        echo "$CRONTAB_LINE" >> "$CRONTAB"
         mntroot ro
     fi
 }
 
 uninstall() {
+    # remove line from crontab
     mntroot rw
-    sed "\_^0 \* \* \* \* /mnt/us/weather/bin/update_weather.sh # update the weather display at the top of every hour$_d" /etc/crontab/root > /etc/crontab/root
+    sed -i "/$CRONTAB_SIGIL$/d" "$CRONTAB"
     mntroot ro
 }
 
-_status() {
-    grep -q "^0 * * * * /mnt/us/weather/bin/update_weather.sh # update the weather display at the top of every hour$" /etc/crontab/root
-    return $?
-}
-
-status() {
-    if _status
-    then
-        eips 0 $((${EIPS_MAXLINES} - 2)) "  Crontab installed" > /dev/null
-    else
-        eips 0 $((${EIPS_MAXLINES} - 2)) "  Crontab not installed" > /dev/null
-    fi  
-}
-
 start() {
-    /mnt/us/${HACKNAME}/bin/init_weather.sh
+    # enter weather display mode
+    "$INIT_WEATHER"
 }
 
 
 ## Main
 case "${1}" in
+"status")
+    "${1}"
+    ;;
 "install")
-    ${1}
+    "${1}"
     ;;
 "uninstall")
-    ${1}
-    ;;
-"status")
-    ${1}
+    "${1}"
     ;;
 "start")
-    ${1}
+    "${1}"
     ;;
 esac
+
