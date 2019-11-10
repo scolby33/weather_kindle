@@ -2,7 +2,7 @@
 <extension>
 	<information>
 		<name>Weather</name>
-		<version>0.1.0</version>
+		<version>1.0.0</version>
 		<author>Scott Colby</author>
 		<id>Weather-Menu</id>
 	</information>
