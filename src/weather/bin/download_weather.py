@@ -421,10 +421,12 @@ def main(argv: List[str]) -> Optional[int]:
         location = cast(LocationKey, arguments["<location>"])
         key = cast(APIKey, arguments["<accuweather_key>"])
         metric = cast(bool, arguments["--metric"])
-        logger.info('Weather Underground: "%s"', location)
+
+        logger.info('AccuWeather: "%s"', location)
         weather_getter = AccuWeatherGetter(key, location, metric=metric)
     elif arguments["<zip>"]:
         zip_ = cast(str, arguments["<zip>"])
+
         zip_ = zip_.strip()
         match = ZIP_RE.fullmatch(zip_)
         if not match:
@@ -436,6 +438,7 @@ def main(argv: List[str]) -> Optional[int]:
     elif arguments["<latitude>"] and arguments["<longitude>"]:
         lat_str = cast(str, arguments["<latitude>"])
         lon_str = cast(str, arguments["<longitude>"])
+
         try:
             lat = float(lat_str)
         except ValueError:
