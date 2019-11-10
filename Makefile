@@ -1,19 +1,21 @@
-.PHONY: clean directories
+.PHONY: clean distclean
 
-EXTENSION_DIRS = $(shell find src/extensions -type d)
-EXTENSION_FILES = $(shell find src/extensions -type f -name '*')
-WEATHER_DIRS = $(shell find src/weather -type d)
-WEATHER_FILES = $(shell find src/weather -type f -name '*')
+DISTDIR := dist
 
-all: Update_weather_k4_install.bin
+UPDATE_DEPS = $(shell find src/extensions src/weather -path '__pycache__' -prune -o ! -name '.DS_Store' ! -name '*.swp')
 
-Update_weather_k4_install.bin: src/install.sh src/libotautils src/weather.tar.xz src/xzdec
-	cd src && kindletool create ota2 -d kindle4 install.sh libotautils xzdec weather.tar.xz ../Update_weather_k4_install.bin
+dist/Update_weather_k4_install.bin: src/install.sh src/libotautils src/weather.tar.xz src/xzdec | DISTDIR
+	cd src && kindletool create ota2 --device kindle4 $(notdir $^) ../$@
 
-src/weather.tar.xz: $(EXTENSION_DIRS) $(EXTENSION_FILES) $(WEATHER_DIRS) $(WEATHER_FILES)
-	cd src; tar -cvJf weather.tar.xz weather extensions
+src/weather.tar.xz: $(UPDATE_DEPS)
+	tar --create --xz --directory=src --file=$@ weather extensions
+
+DISTDIR:
+	mkdir -p dist
 
 clean:
-	rm src/weather.tar.xz
-	rm Update_weather_k4_install.bin
+	git clean -fx
+
+distclean:
+	git clean -fdx
 
