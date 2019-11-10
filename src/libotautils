@@ -2,7 +2,7 @@
 #
 #  Logging/Progressbar handling for OTA update scripts
 #
-#  $Id: libotautils 11089 2014-11-15 21:42:51Z NiLuJe $
+#  $Id: libotautils 15379 2018-09-01 18:15:20Z NiLuJe $
 #
 #  kate: syntax bash;
 #
@@ -15,6 +15,7 @@ _FUNCTIONS=/etc/rc.d/functions
 
 # Make sure HACKNAME is set (NOTE: This should be overriden in the update script)
 [ -z "${HACKNAME}" ] && HACKNAME="ota_script"
+
 
 # Slightly tweaked version of msg() (from ${_FUNCTIONS}, where the constants are defined)
 logmsg()
@@ -49,12 +50,78 @@ logmsg()
 EIPS_MAXCHARS="$((${SCREEN_X_RES} / ${EIPS_X_RES}))"
 EIPS_MAXLINES="$((${SCREEN_Y_RES} / ${EIPS_Y_RES}))"
 
+
 # Adapted from libkh[5]
-eips_print_bottom_centered()
+## Check if we have an FBInk binary available somewhere...
+# Default to something that won't horribly blow up...
+FBINK_BIN="true"
+for my_hackdir in linkss linkfonts libkh usbnet ; do
+	my_fbink="/mnt/us/${my_hackdir}/bin/fbink"
+	if [ -x "${my_fbink}" ] ; then
+		FBINK_BIN="${my_fbink}"
+		# Got it!
+		break
+	fi
+done
+has_fbink()
+{
+	# Because the fallback is the "true" binary/shell built-in ;).
+	if [ "${FBINK_BIN}" != "true" ] ; then
+		# Got it!
+		return 0
+	fi
+
+	# If we got this far, we don't have fbink installed
+	return 1
+}
+
+do_fbink_print()
 {
 	# We need at least two args
 	if [ $# -lt 2 ] ; then
-		echo "not enough arguments passed to eips_print_bottom_centered ($# while we need at least 2)"
+		echo "not enough arguments passed to do_fbink_print ($# while we need at least 2)"
+		return
+	fi
+
+	kh_eips_string="${1}"
+	kh_eips_y_shift_up="${2}"
+
+	# Unlike eips, we need at least a single space to even try to print something ;).
+	if [ "${kh_eips_string}" == "" ] ; then
+		kh_eips_string=" "
+	fi
+
+	# Check if we asked for a highlighted message...
+	if [ "${3}" == "h" ] ; then
+		fbink_extra_args="h"
+	else
+		fbink_extra_args=""
+	fi
+
+	# NOTE: FBInk will handle the padding. FBInk's default font is square, not tall like eips,
+	#       so we compensate by tweaking the baseline ;).
+	${FBINK_BIN} -qpm${fbink_extra_args} -y $(( -4 - ${kh_eips_y_shift_up} )) "${kh_eips_string}"
+}
+
+do_fbink_bar()
+{
+	# We need at least two args
+	if [ $# -lt 2 ] ; then
+		echo "not enough arguments passed to do_fbink_bar ($# while we need at least 2)"
+		return
+	fi
+
+	fbink_progress="${1}"
+	kh_eips_y_shift_up="${2}"
+
+	${FBINK_BIN} -qP ${fbink_progress} -y $(( -4 - ${kh_eips_y_shift_up} ))
+}
+
+do_eips_print()
+{
+	# We need at least two args
+	if [ $# -lt 2 ] ; then
+		echo "not enough arguments passed to do_eips_print ($# while we need at least 2)"
 		return
 	fi
 
@@ -78,14 +145,34 @@ eips_print_bottom_centered()
 		kh_eips_string="${kh_eips_string} "
 	done
 
+	# And finally, show our formatted message centered on the bottom of the screen (NOTE: Redirect to /dev/null to kill unavailable character & pixel not in range warning messages)
+	eips 0 $((${EIPS_MAXLINES} - 2 - ${kh_eips_y_shift_up})) "${kh_eips_string}" >/dev/null
+}
+
+eips_print_bottom_centered()
+{
+	# We need at least two args
+	if [ $# -lt 2 ] ; then
+		echo "not enough arguments passed to eips_print_bottom_centered ($# while we need at least 2)"
+		return
+	fi
+
+	kh_eips_string="${1}"
+	kh_eips_y_shift_up="${2}"
+
 	# Sleep a tiny bit to workaround the logic in the 'new' (K4+) eInk controllers that tries to bundle updates
 	if [ "${EIPS_SLEEP}" == "true" ] ; then
 		usleep 150000	# 150ms
 	fi
 
-	# And finally, show our formatted message centered on the bottom of the screen (NOTE: Redirect to /dev/null to kill unavailable character & pixel not in range warning messages)
-	eips 0 $((${EIPS_MAXLINES} - 2 - ${kh_eips_y_shift_up})) "${kh_eips_string}" >/dev/null
+	# Can we use FBInk?
+	if has_fbink ; then
+		do_fbink_print "${kh_eips_string}" ${kh_eips_y_shift_up}
+	else
+		do_eips_print "${kh_eips_string}" ${kh_eips_y_shift_up}
+	fi
 }
+
 
 ## Progressbar
 # Check if arg is an int
@@ -107,7 +194,7 @@ is_integer "${STEPCOUNT}" || STEPCOUNT=1
 # In case we need to catch failure early...
 otautils_die()
 {
-	# FIXME: Invest in a custom eips message?
+	# FIXME: Invest in a custom eips message? We've got one in libotautils5...
 
 	# And it is called die, after all ;)
 	sleep 5
@@ -147,7 +234,12 @@ otautils_update_progressbar()
 
 	# If we're not in the updater runlevel (3), do it ourselves ;)
 	if [ "$(runlevel | sed -n -r 's/^([[:alnum:]])([[:blank:]]*)([[:alnum:]])$/\3/p')" -ne 3 ] ; then
-		eips_print_bottom_centered "Progress: ${_CUR_PERCENTAGE}/100" 2
+		# NOTE: We can actually draw a progress bar with FBInk!
+		if has_fbink ; then
+			do_fbink_bar ${_CUR_PERCENTAGE} 2
+		else
+			do_eips_print "Progress: ${_CUR_PERCENTAGE}/100" 2
+		fi
 	else
 		# We're in the updater, refresh the bar (update_progressbar is from ${_FUNCTIONS)
 		update_progressbar ${_CUR_PERCENTAGE}
