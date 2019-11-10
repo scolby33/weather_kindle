@@ -4,7 +4,7 @@
 Usage:
     download_weather.py [-r | --rotated] [-t <template> | --template <template>] [--] <zip>
     download_weather.py [-r | --rotated] [-t <template> | --template <template>] [--] <latitude> <longitude>
-    download_weather.py [-r | --rotated] [-t <template> | --template <template>] [-m | --metric] (-k <accuweather_key> | --key <accuweather_key>) [--] <location>
+    download_weather.py [-r | --rotated] [-m | --metric] [-t <template> | --template <template>] (-k <accuweather_key> | --key <accuweather_key>) [--] <location>
     download_weather.py (-h | --help)
     download_weather.py --version
 
@@ -12,6 +12,7 @@ Options:
     -h --help       Show this screen.
     --version       Show version.
     -r, --rotated   Rotate the output image 180 degrees.
+    -m, --metric    Output with metric units. (AccuWeather only.)
     -t <template>, --template <template>   Template file. [default: -]
     -k, --key       AccuWeather API key.
 
