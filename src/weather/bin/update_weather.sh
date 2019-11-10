@@ -22,9 +22,6 @@ mv "${CACHE_DIR}/weather_out.svg" "${CACHE_DIR}/weather_out.svg.old"
 mv "${CACHE_DIR}/weather_out.png" "${CACHE_DIR}/weather_out.png.old"
 mv "${CACHE_DIR}/weather.png" "${CACHE_DIR}/weather.png.old"
 
-# remove the old final output so we can check if there's an error by its existence
-rm "${CACHE_DIR}/weather.png"
-
 "${DOWNLOAD_WEATHER}" \
     "${ROTATED:+--rotated}" \
     --template "${TEMPLATE}" \
