@@ -54,7 +54,7 @@ from typing import (
 from urllib.error import URLError
 from xml.etree import ElementTree as ET
 
-sys.path.insert(0, str(Path("../lib").resolve()))
+sys.path.insert(0, str(Path("../lib/python3.7/site-packages").resolve()))
 
 from docopt import docopt
 
