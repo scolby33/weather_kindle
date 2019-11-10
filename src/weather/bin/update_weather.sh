@@ -1,53 +1,53 @@
 #!/bin/sh
 
-cd /mnt/us/weather
+cd /mnt/us/weather || exit 1
 
-source etc/weather_config
+BIN_DIR=bin
+CONFIG_DIR=etc
+STATIC_DIR=usr/share/weather
+CACHE_DIR=var/cache/weather
 
-# clean up old images
-rm img/weather_out.svg.old
-rm img/weather_out.png.old
-rm img/weather.png.old
+DOWNLOAD_WEATHER="${BIN_DIR}/download_weather.py"
+RSVG_CONVERT="${BIN_DIR}/rsvg-convert"
+PNGCRUSH="${BIN_DIR}/pngcrush"
+EIPS="/usr/sbin/eips"
+
+TEMPLATE="${STATIC_DIR}/weather_template.svg"
+
+# shellcheck source=../etc/weather_config.sh
+. "${CONFIG_DIR}/weather_config.sh"
 
 # save current images as old; mostly useful for debugging
-mv img/weather_out.svg img/weather_out.svg.old
-mv img/weather_out.png img/weather_out.png.old
-mv img/weather.png img/weather.png.old
+mv "${CACHE_DIR}/weather_out.svg" "${CACHE_DIR}/weather_out.svg.old"
+mv "${CACHE_DIR}/weather_out.png" "${CACHE_DIR}/weather_out.png.old"
+mv "${CACHE_DIR}/weather.png" "${CACHE_DIR}/weather.png.old"
 
-# downloads the weather and outputs to img/weather_out.svg
-OPTIONS="--template img/weather_template.svg"
-if [ "${ROTATED:-0}" -ge 1 ]
-then
-    OPTIONS="$OPTIONS --rotated"
-fi
+# remove the old final output so we can check if there's an error by its existence
+rm "${CACHE_DIR}/weather.png"
 
-if [ -n "${ZIP+x}" ]
-then
-    bin/download_weather.py ${OPTIONS} -- "${ZIP}" > img/weather_out.svg
-elif [ -n "${LAT+x}" ] && [ -n "${LON+x}" ]
-then
-    bin/download_weather.py ${OPTIONS} -- "${LAT}" "${LON}" > img/weather_out.svg
-elif [ -n "${LOCATION+x}" ] && [ -n "${LOCATION+x}" ]
-then
-    bin/download_weather.py ${OPTIONS} --key "${KEY}" -- "${LOCATION}" > img/weather_out.svg
-else
-    >&2 echo "No valid locations defined"
-    >&2 echo "Check etc/weather_config"
-fi
+"${DOWNLOAD_WEATHER}" \
+    "${ROTATED:+--rotated}" \
+    --template "${TEMPLATE}" \
+    "${METRIC:+--metric}" \
+    "${KEY:+--key $KEY}" \
+    -- \
+    "${ZIP}" \
+    "${LAT}" "${LON}" \
+    "${LOCATION}" > "${CACHE_DIR}/weather_out.svg"
 
 # convert the svg to a png with white background (no transparency allowed!)
-/mnt/us/weather/bin/rsvg-convert --background-color=white -o img/weather_out.png img/weather_out.svg
+"${RSVG_CONVERT}" --background-color=white -o "${CACHE_DIR}/weather_out.png" "${CACHE_DIR}/weather_out.svg"
 
 # change png to greyscale without alpha (color type (-c) 0)
-/mnt/us/weather/bin/pngcrush -qf -c 0 img/weather_out.png img/weather.png
+"${PNGCRUSH}" -qf -c 0 "${CACHE_DIR}/weather_out.png" "${CACHE_DIR}/weather.png"
 
 # clear the screen twice to prevent ghosting
-eips -c
-eips -c
+"${EIPS}" -c
+"${EIPS}" -c
 
 # if everything worked, put the weather up; if not, show an error
-if [ -e img/weather.png ]; then
-	eips -g img/weather.png
+if [ -e "${CACHE_DIR}/weather.png" ]; then
+    "${EIPS}" -g "${CACHE_DIR}/weather.png"
 else
-	eips -g img/error.png
+    "${EIPS}" -g "${STATIC_DIR}/error${ROTATED+_rotated}.png"
 fi
