@@ -5,6 +5,8 @@
 HACKNAME="weather"
 HACKVER="1.0.0"
 
+LOGCOMPONENT="install"
+
 # Directories
 WEATHER_BASEDIR="/mnt/us/$HACKNAME"
 EXTENSIONS_BASEDIR="/mnt/us/extensions/$HACKNAME"
@@ -15,21 +17,21 @@ WEATHER_CONFIG_BU="$WEATHER_BASEDIR/../weather_config.sh.orig"
 
 # remove existing install, preserving config
 otautils_update_progressbar
-logmsg "I" "install" "" "Removing existing weather install"
+logmsg "I" "$LOGCOMPONENT" "" "Removing existing weather install"
 if [ -f "$WEATHER_CONFIG" ]; then
-    logmsg "I" "install" "" "Found existing config; preserving it"
+    logmsg "I" "$LOGCOMPONENT" "" "Found existing config; preserving it"
     cp "$WEATHER_CONFIG" "$WEATHER_CONFIG_BU"
 fi
 rm -rf "$WEATHER_BASEDIR"
 
 # install new version
 otautils_update_progressbar
-logmsg "I" "install" "" "Unpacking weather to user store"
+logmsg "I" "$LOGCOMPONENT" "" "Unpacking weather to user store"
 # Make sure xzdec is executable first
 chmod +x xzdec; ./xzdec "$HACKNAME.tar.xz" | tar -xvf - -C /mnt/us
 _RET=$?
 if [ "$_RET" -ne 0 ]; then
-    logmsg "C" "install" "code=$_RET" "Failed to unpack weather."
+    logmsg "C" "$LOGCOMPONENT" "code=$_RET" "Failed to unpack weather."
     exit 1
 fi
 # backup default config
@@ -38,23 +40,27 @@ cp -f "$WEATHER_CONFIG" "$WEATHER_CONFIG.default"
 # replace config if necessary
 otautils_update_progressbar
 if [ -f "$WEATHER_CONFIG_BU" ]; then
-    logmsg "I" "install" "" "Restoring original config"
+    logmsg "I" "$LOGCOMPONENT" "" "Restoring original config"
     mv "$WEATHER_CONFIG_BU" "$WEATHER_CONFIG"
 fi
 
 # make sure everything needed is executable
 otautils_update_progressbar
-logmsg "I" "install" "" "Marking executables as executable"
+logmsg "I" "$LOGCOMPONENT" "" "Marking executables as executable"
 chmod -R +x "$WEATHER_BASEDIR/bin" "$EXTENSIONS_BASEDIR/bin"
 
 # clean up
 otautils_update_progressbar
-logmsg "I" "install" "" "Cleaning up"
+logmsg "I" "$LOGCOMPONENT" "" "Cleaning up"
 rm -f "$HACKNAME.tar.xz" "xzdec"
+
+# sync the filesystem
+otautils_update_progressbar
+sync
 
 # done
 otautils_update_progressbar
-logmsg "I" "install" "" "Done!"
+logmsg "I" "$LOGCOMPONENT" "" "Done!"
 
 otautils_update_progressbar
 return 0
