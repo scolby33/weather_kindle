@@ -1,3 +1,6 @@
+# build intermediate files
+src/weather.tar.xz
+
 # Output image files
 weather/var/cache/weather/weather_out.*
 weather/var/cache/weather/weather.png*
