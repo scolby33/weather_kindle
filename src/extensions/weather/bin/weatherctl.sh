@@ -26,9 +26,9 @@ _installed() {
 status() {
     # print crontab installation status to the screen
     if _installed; then
-        _msg "  Crontab installed"
+        _msg "  Crontab installed."
     else
-        _msg "  Crontab not installed"
+        _msg "  Crontab not installed."
     fi
 }
 
@@ -41,7 +41,7 @@ install() {
     fi
 
     if _installed; then
-        _msg "  Crontab successfully installed"
+        _msg "  Crontab successfully installed."
     else
         _msg "  Failed to install to crontab!"
         exit 1
@@ -55,7 +55,7 @@ uninstall() {
     mntroot ro
 
     if ! _installed; then
-        _msg "  Crontab successfully uninstalled"
+        _msg "  Crontab successfully uninstalled."
     else
         _msg "  Failed to uninstall crontab!"
         exit 1
