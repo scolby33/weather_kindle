@@ -1,6 +1,6 @@
 # Output image files
-weather/img/weather_out.*
-weather/img/weather.png*
+weather/var/cache/weather/weather_out.*
+weather/var/cache/weather/weather.png*
 
 # Created by https://www.gitignore.io/api/python,vim,osx,windows
 
@@ -26,7 +26,7 @@ eggs/
 lib64/
 parts/
 sdist/
-var/
+# var/  # I actually mean to ship some things in var/
 *.egg-info/
 .installed.cfg
 *.egg
