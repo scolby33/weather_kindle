@@ -39,6 +39,13 @@ install() {
         echo "$CRONTAB_LINE" >> "$CRONTAB"
         mntroot ro
     fi
+
+    if _installed; then
+        _msg "  Crontab successfully installed"
+    else
+        _msg "  Failed to install to crontab!"
+        exit 1
+    fi
 }
 
 uninstall() {
@@ -46,6 +53,13 @@ uninstall() {
     mntroot rw
     sed -i "/$CRONTAB_SIGIL$/d" "$CRONTAB"
     mntroot ro
+
+    if ! _installed; then
+        _msg "  Crontab successfully uninstalled"
+    else
+        _msg "  Failed to uninstall crontab!"
+        exit 1
+    fi
 }
 
 start() {
