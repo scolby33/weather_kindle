@@ -4,7 +4,7 @@
 Usage:
     download_weather.py [-r | --rotated] [-t <template> | --template <template>] [--] <zip>
     download_weather.py [-r | --rotated] [-t <template> | --template <template>] [--] <latitude> <longitude>
-    download_weather.py [-r | --rotated] [-t <template> | --template <template>] (-m | --metric) (-k <accuweather_key> | --key <accuweather_key>) [--] <location>
+    download_weather.py [-r | --rotated] [-t <template> | --template <template>] [-m | --metric] (-k <accuweather_key> | --key <accuweather_key>) [--] <location>
     download_weather.py (-h | --help)
     download_weather.py --version
 
