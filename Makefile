@@ -2,7 +2,7 @@
 
 DISTDIR := dist
 
-UPDATE_DEPS = $(shell find src/extensions src/weather -path '__pycache__' -prune -o ! -name '.DS_Store' ! -name '*.swp')
+UPDATE_DEPS = $(shell find src/extensions src/weather -path '__pycache__' -prune -o ! -name '*.pyc' ! -name '.DS_Store' ! -name '*.swp')
 
 all: dist/Update_weather_k4_kt_install.bin dist/Update_weather_k4_kt_uninstall.bin
 
@@ -13,7 +13,7 @@ dist/Update_weather_k4_kt_uninstall.bin: src/uninstall.sh src/libotautils | DIST
 	cd src && kindletool create ota2 --device kindle4 --device touch $(notdir $^) ../$@
 
 src/weather.tar.xz: $(UPDATE_DEPS)
-	tar --create --xz --directory=src --file=$@ weather extensions
+	tar --create --xz --directory=src --exclude '*.pyc' --exclude '__pycache__' --verbose --file=$@ weather extensions
 
 DISTDIR:
 	mkdir -p dist
