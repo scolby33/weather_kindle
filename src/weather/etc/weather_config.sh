@@ -10,9 +10,18 @@
 # count as unset.
 #ROTATED="1"
 
-###################################################################
-# Uncomment and set ALL the options for ONE of the sections below #
-###################################################################
+# Uncomment if you want metric units
+# (Celsius instead of Farhenheit)
+# Only works with AccuWeather and WMO, ignored by Weather.gov
+# This variable is checked for being set and not null;
+# the value does not matter. For example,
+# `METRIC="0"` would also count as set. `METRIC=""` would
+# count as unset.
+#METRIC="1"
+
+################################################################################
+# Uncomment and set ALL the configuration values for ONE of the sections below #
+################################################################################
 
 #----------------------------#
 # Weather.gov using ZIP code #
@@ -50,11 +59,13 @@ ZIP="10001"
 # documentation should be sufficient.
 #LOCATION="349727"
 
-# Uncomment if you want metric units
-# (Celsius instead of Farhenheit)
-# Only works with AccuWeather
-# This variable is checked for being set and not null;
-# the value does not matter. For example,
-# `METRIC="0"` would also count as set. `METRIC=""` would
-# count as unset.
-#METRIC="1"
+#----------------------------------#
+# World Meterological Organization #
+#----------------------------------#
+# Works worldwide, without an API key!
+
+# Find the "City ID" for your location.
+# Find the closest city to you from the list on the WMO site:
+# https://worldweather.wmo.int/en/json/full_city_list.txt
+#CITY_ID="278"
+

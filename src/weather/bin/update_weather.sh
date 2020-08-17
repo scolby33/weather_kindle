@@ -22,7 +22,7 @@ mv "$CACHE_DIR/weather_out.svg" "$CACHE_DIR/weather_out.svg.old"
 mv "$CACHE_DIR/weather_out.png" "$CACHE_DIR/weather_out.png.old"
 mv "$CACHE_DIR/weather.png" "$CACHE_DIR/weather.png.old"
 
-"$DOWNLOAD_WEATHER" ${ROTATED:+"--rotated"} ${METRIC:+"--metric"} --template ${TEMPLATE:?"missing TEMPLATE"} ${KEY:+"--key"} ${KEY:+"$KEY"} -- ${ZIP:+"$ZIP"} ${LAT:+"$LAT"} ${LON:+"$LON"} ${LOCATION:+"$LOCATION"} > "$CACHE_DIR/weather_out.svg"
+"$DOWNLOAD_WEATHER" ${ROTATED:+"--rotated"} ${METRIC:+"--metric"} --template ${TEMPLATE:?"missing TEMPLATE"} ${KEY:+"--key"} ${KEY:+"$KEY"} -- ${ZIP:+"$ZIP"} ${LAT:+"$LAT"} ${LON:+"$LON"} ${LOCATION:+"$LOCATION"} ${CITY_ID:+"$CITY_ID"} > "$CACHE_DIR/weather_out.svg"
 
 # convert the svg to a png with white background (no transparency allowed!)
 "$RSVG_CONVERT" --background-color=white -o "$CACHE_DIR/weather_out.png" "$CACHE_DIR/weather_out.svg"
