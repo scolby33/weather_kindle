@@ -1,14 +1,14 @@
 # Weather Kindle
 
-Use your Kindle 4 to display a weather forecast, no other server required!
+Use your Kindle to display a weather forecast, no server required!
 
 ## Installation
 
 ### Prerequisites
-You must have a jailbroken Kindle 4 with USBNetwork and Python installed.
+You must have a jailbroken Kindle 4 with Python 3 installed.
 Visit [the MobileRead forums](http://www.mobileread.com/forums/showthread.php?t=88004) for information on accomplishing this.
 
-This software has only been tested on a Kindle 4, but will likely work with some modification on other versions of Kindles. Due to architectural differences between Kindles, the `rsvg-convert` and `pngcrush` binaries and the shared libraries in `lib` might need to be replaced. A cross-platform, easier install is in the works.
+This software has only been tested on a Kindle 4, but will likely work with some modification on other versions of Kindles. Due to architectural differences between Kindles, the `rsvg-convert` and `pngcrush` binaries and the shared libraries in `lib` might need to be replaced.
 
 ### Initial Setup
 
