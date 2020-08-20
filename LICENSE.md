@@ -6,11 +6,13 @@ RSVG is used under the terms of the GNU General Public License. There have been 
 
 Pngcrush is used under the terms of the Pngcrush license, which allows for use and distribution of the program with no fee. There have been no modifications to Pngcrush as obtained from the original creators.
 
-The remainder of weather_kindle is Copyright (c) 2019 Scott Colby and is available under the MIT license.
+Docopt is used under the terms of the MIT license. There have been no modifications to docopt as obtained from the original creators.
+
+The remainder of weather_kindle is Copyright (c) 2020 Scott Colby and is available under the MIT license.
 
 ## MIT License
 
-Copyright (c) 2019 Scott Colby
+Copyright (c) 2020 Scott Colby
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
