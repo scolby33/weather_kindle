@@ -1,43 +1,43 @@
 # Weather Kindle
 
-Use your Kindle to display a weather forecast, no server required!
+Use your Kindle to display a weather forecast!
 
 ## Installation
 
 ### Prerequisites
-You must have a jailbroken Kindle 4 with Python 3 installed.
-Visit [the MobileRead forums](http://www.mobileread.com/forums/showthread.php?t=88004) for information on accomplishing this.
+You must have a jailbroken Kindle with Python 3 installed. Visit [the MobileRead forums](https://www.mobileread.com/forums/showthread.php?t=320564) for information on accomplishing this.
 
-This software has only been tested on a Kindle 4, but will likely work with some modification on other versions of Kindles. Due to architectural differences between Kindles, the `rsvg-convert` and `pngcrush` binaries and the shared libraries in `lib` might need to be replaced.
+This software has only been tested on a Kindle 4, but will likely work with some modification on other models of Kindle. Due to architectural differences between Kindle models, the `rsvg-convert` and `pngcrush` binaries and the shared libraries in `lib` might need to be replaced. If you have a different Kindle model that you'd like to use this program with, please open an issue and I will do my best to adapt it for your device!
 
-### Initial Setup
+### Installing a Release `.bin`
 
-1. Change the ZIP code at the top of `weather/bin/update_weather.sh` to match your location.
-2. Copy the `weather` folder and its contents to the root of your Kindle's USB storage (`/mnt/us/`, if using SCP).
-3. SSH into your Kindle and run `mntroot rw` and append the following line to `/etc/crontab/root`.
+1. Download the appropriate `Update_weather_{device abbreviation}_install.bin` installer from the [releases page](https://github.com/scolby33/weather_kindle/releases) of this repo.
+2. Transfer the installer to your Kindle via USB. Place it in the `mrpackages` directory at the root of your Kindle.
+3. Run the installer using the MobileRead Package Installer (MRPI) using the "Install MR Packages" option in KUAL.
+4. Continue to [configuration](#configuration), below.
 
-    ```
-    0 * * * * /mnt/us/weather/bin/update_weather.sh  # update the weather display at the top of every hour
-    ```
-4. Make sure your Kindle is connected to an active Wi-Fi network.
-5. Run `/mnt/us/weather/bin/init_weather.sh`.
+### Configuration
 
-### Temporarily Disabling the Weather Display
+The installer will have created a configuration file at `weather/etc/weather_config.sh`. Connect to your Kindle via USB and open this file in a text editor. Follow the instructions within to configure your location and what weather service you want to use to obtain the local weather data. The current best choice is the World Meterological Organization, which seems to have the most stable API.
 
-1. SSH into your Kindle and run `mntroot rw`.
-2. Comment out or remove the line you added to `/etc/crontab/root`.
-3. Restart your Kindle, either by running `restart` via SSH or holding the power button.
+### Begin Displaying the Weather
 
+Disconnect your Kindle from your computer and open KUAL. The installer will have created a "Weather" entry in the menu. There are two steps to perform:
 
-### Full Uninstallation
+1. Choose the "Install in Crontab" option to set up hourly updates of the weather.
+2. Choose the "Start Weather Display" option to bring the weather display full screen and put your Kindle in weather mode.
 
-1. SSH into your Kindle and run `mntroot rw`.
-2. Comment out or remove the line you added to `/etc/crontab/root`.
-3. Run `mntroot ro`.
-4. Run `rm -r /mnt/us/weather`.
-5. Follow the directions to uninstall USBNetwork, Python, and the Jailbreak, which were provided with each of the installation packages.
+### Stop Displaying the Weather
 
-# History and Current Status
+To exit weather mode, you must reboot your Kindle. Perform whatever steps are necessary for your device; on my Kindle 4, this requires pressing and holding the power button for several seconds. Once your Kindle has rebooted, open KUAL and choose "Remove from Crontab" from the Weather menu. This will prevent your Kindle from interrupting you every hour trying to display the weather. After this, you can use your Kindle as norma.
+
+### Uninstallation
+
+1. Download the latest version of the appropriate `Update_weather_{device abbreviation}_uninstall.bin` uninstaller from the [releases page](https://github.com/scolby33/weather_kindle/releases) of this repo.
+2. Transfer the uninstaller to your Kindle via USB. Place it in the `mrpackages` directory at the root of your Kindle.
+3. Run hte uninstaller using the MobileRead Package Installer (MRPI) using the "Install MR Packages" option in KUAL. Even though this option is called "install," if you loaded the uninstaller to your Kindle, the uninstallation process will take place.
+
+## History and Current Status
 
 This project is based on and inspired by Matthew Petroff's [Kindle Weather Display](https://mpetroff.net/2012/09/kindle-weather-display/) (also [on Github](https://github.com/mpetroff/kindle-weather-display)).
 I was disappointed, however, by the need for an external server to download the weather information and process the images.
@@ -45,9 +45,9 @@ Putting together some ARM binaries from the Debian APT repository, a few shell s
 
 A few years later, I dug this out and re-wrote significant portions of the code and have put it together to post on GitHub and on the Mobile Read forums.
 
-I am currently in the process of packaging this up as a Kindle "update" for easier installation and adding [KUAL](http://www.mobileread.com/forums/showthread.php?t=203326) compatibility. This should also help with the creation of versions for other types of Kindles.
+Most recently, I have created `.bin` installers and uninstallers and released them as built artifacts on GitHub.
 
-# License
+## License
 
 The weather image template and icons, which were originally created by Matthew Petroff, are used under the CC0 Public Domain Dedication. My modifications to the weather image template are also dedicated to the public under the CC0 Public Domain Dedication. The original source is found at https://github.com/mpetroff/kindle-weather-display.
 
@@ -55,7 +55,9 @@ RSVG is used under the terms of the GNU General Public License. There have been 
 
 Pngcrush is used under the terms of the Pngcrush license, which allows for use and distribution of the program with no fee. There have been no modifications to Pngcrush as obtained from the original creators.
 
-The remainder of weather_kindle is Copyright (c) 2019 Scott Colby and is available under the MIT license.
+Docopt is used under the terms of the MIT license. There have been no modifications to docopt as obtained from the original creators.
+
+The remainder of weather_kindle is Copyright (c) 2020 Scott Colby and is available under the MIT license.
 
 See the [LICENSE.md](LICENSE.md) file for the full text of the license.
 
