@@ -565,6 +565,8 @@ def main(argv: List[str]) -> Optional[int]:
 
     weather_getter: WeatherGetter
 
+    metric = cast(bool, arguments["--metric"])
+
     if (
         arguments["<location>"]
         and arguments["--key"]
@@ -572,7 +574,6 @@ def main(argv: List[str]) -> Optional[int]:
     ):
         location = cast(LocationKey, arguments["<location>"])
         key = cast(APIKey, arguments["<accuweather_key>"])
-        metric = cast(bool, arguments["--metric"])
 
         logger.info('AccuWeather: "%s"', location)
         weather_getter = AccuWeatherGetter(key, location, metric=metric)
@@ -586,13 +587,13 @@ def main(argv: List[str]) -> Optional[int]:
             zip_ = cast(ZipCode, match.group("zip"))
 
             logger.info('Weather.gov: "%s"', zip_)
-            weather_getter = WeatherGovGetter(zip_)
+            weather_getter = WeatherGovGetter(zip_, metric=metric)
         else:
             if zip_.isnumeric() and len(zip_) <= 4:
                 city_id = cast(CityID, int(zip_))
 
                 logger.info('WMO: "%s"', city_id)
-                weather_getter = WMOGetter(city_id)
+                weather_getter = WMOGetter(city_id, metric=metric)
             else:
                 die(Sysexits.EX_USAGE, 'Invalid ZIP Code/WMO City ID: "%s"', zip_)
     elif arguments["<city_id>"]:
@@ -604,7 +605,7 @@ def main(argv: List[str]) -> Optional[int]:
             city_id = cast(CityID, int(city_id_str))
 
             logger.info('WMO: "%s"', city_id)
-            weather_getter = WMOGetter(city_id)
+            weather_getter = WMOGetter(city_id, metric=metric)
         else:
             die(Sysexits.EX_USAGE, 'WMO City ID must be numeric: "%s"', city_id)
     elif arguments["<latitude>"] and arguments["<longitude>"]:
@@ -622,7 +623,7 @@ def main(argv: List[str]) -> Optional[int]:
 
         logger.info('Weather.gov: "%f/%f"', lat, lon)
         latlon = LatLon(lat, lon)
-        weather_getter = WeatherGovGetter(latlon)
+        weather_getter = WeatherGovGetter(latlon, metric=metric)
     else:
         # this shouldn't happen because of docopt
         die(Sysexits.EX_USAGE, "No location on command line")
