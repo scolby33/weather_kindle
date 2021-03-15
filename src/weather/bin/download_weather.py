@@ -307,7 +307,8 @@ class AccuWeatherGetter(WeatherGetter):
     def __init__(self, api_key: str, location: LocationKey, *args, **kwargs):
         self.api_key = api_key
 
-        self._weather_data: Optional[dict] = None
+        self._weather_data: Optional[Dict] = None
+        self._sorted_forecasts_storage: Optional[List] = None
 
         super().__init__(location, *args, **kwargs)
 
@@ -344,47 +345,48 @@ class AccuWeatherGetter(WeatherGetter):
         super().get_weather()
 
     @property
-    def highs(self):
-        if not self._highs:
-            sorted_forecasts = sorted(
+    def _sorted_forecasts(self):
+        if not self._sorted_forecasts_storage:
+            self._sorted_forecasts_storage = sorted(
                 self._weather["DailyForecasts"], key=itemgetter("Date")
             )
+        return self._sorted_forecasts_storage
+
+    @property
+    def highs(self):
+        if not self._highs:
             self._highs = tuple(
                 str(int(forecast["Temperature"]["Maximum"]["Value"]))
-                for forecast in sorted_forecasts
+                for forecast in self._sorted_forecasts
             )
         return self._highs
 
     @property
     def lows(self):
         if not self._lows:
-            sorted_forecasts = sorted(
-                self._weather["DailyForecasts"], key=itemgetter("Date")
-            )
             self._lows = tuple(
                 str(int(forecast["Temperature"]["Minimum"]["Value"]))
-                for forecast in sorted_forecasts
+                for forecast in self._sorted_forecasts
             )
         return self._lows
 
     @property
     def icons(self):
         if not self._icons:
-            sorted_forecasts = sorted(
-                self._weather["DailyForecasts"], key=itemgetter("Date")
-            )
             self._icons = tuple(
                 self._icon_mapping[forecast["Day"]["Icon"]]
-                for forecast in sorted_forecasts
+                for forecast in self._sorted_forecasts
             )
         return self._icons
 
     @property
     def first_date(self):
         if not self._first_date:
-            self._first_date = datetime.fromisoformat(
-                self._weather["Headline"]["EffectiveDate"]
-            ).date()
+            if self._sorted_forecasts:
+                first_date = self._sorted_forecasts[0]["Date"]
+            else:
+                first_date = self._weather["Headline"]["EffectiveDate"]
+            self._first_date = datetime.fromisoformat(first_date).date()
         return self._first_date
 
 
