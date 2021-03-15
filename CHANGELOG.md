@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.2 <15 March 2021>
+
+- Fix WMO `--metric` option, which didn't get merged last time because I forgot to push a branch ([#2](https://github.com/scolby33/weather_kindle/issues/2), [#6](https://github.com/scolby33/weather_kindle/pulls/6))
+
 ## 1.0.1 <15 March 2021>
 
 - Fix WMO for city ID's shorter than 3 digits ([#2](https://github.com/scolby33/weather_kindle/issues/2), [#3](https://github.com/scolby33/weather_kindle/pulls/3))
