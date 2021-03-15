@@ -13,7 +13,7 @@ Options:
     -h --help       Show this screen.
     --version       Show version.
     -r, --rotated   Rotate the output image 180 degrees.
-    -m, --metric    Output with metric units. (AccuWeather only.)
+    -m, --metric    Output with metric units. (AccuWeather and WMO only.)
     -t <template>, --template <template>   Template file. [default: -]
     -k, --key       AccuWeather API key.
 
@@ -462,7 +462,7 @@ class WMOGetter(WeatherGetter):
     }
 
     def __init__(self, location: CityID, *args, **kwargs):
-        self._weather_data: Optional[dict] = None
+        self._weather_data: Optional[Dict] = None
 
         super().__init__(location, *args, **kwargs)
 
@@ -590,13 +590,25 @@ def main(argv: List[str]) -> Optional[int]:
             logger.info('Weather.gov: "%s"', zip_)
             weather_getter = WeatherGovGetter(zip_)
         else:
-            if zip_.isnumeric() and len(zip_) >= 3 and len(zip_) <= 4:
+            if zip_.isnumeric() and len(zip_) <= 4:
                 city_id = cast(CityID, int(zip_))
 
                 logger.info('WMO: "%s"', city_id)
                 weather_getter = WMOGetter(city_id)
             else:
                 die(Sysexits.EX_USAGE, 'Invalid ZIP Code/WMO City ID: "%s"', zip_)
+    elif arguments["<city_id>"]:
+        city_id_str = cast(str, arguments["<city_id>"])
+
+        city_id_str = city_id_str.strip()
+
+        if city_id_str.isnumeric():
+            city_id = cast(CityID, int(city_id_str))
+
+            logger.info('WMO: "%s"', city_id)
+            weather_getter = WMOGetter(city_id)
+        else:
+            die(Sysexits.EX_USAGE, 'WMO City ID must be numeric: "%s"', city_id)
     elif arguments["<latitude>"] and arguments["<longitude>"]:
         lat_str = cast(str, arguments["<latitude>"])
         lon_str = cast(str, arguments["<longitude>"])
