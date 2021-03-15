@@ -18,7 +18,7 @@ This software has only been tested on a Kindle 4, but will likely work with some
 
 ### Configuration
 
-The installer will have created a configuration file at `weather/etc/weather_config.sh`. Connect to your Kindle via USB and open this file in a text editor. Follow the instructions within to configure your location and what weather service you want to use to obtain the local weather data. The current best choice is the World Meterological Organization, which seems to have the most stable API.
+The installer will have created a configuration file at `weather/etc/weather_config.sh`. Connect to your Kindle via USB and open this file in a text editor. Follow the instructions within to configure your location and what weather service you want to use to obtain the local weather data. The current best choice is the World Meteorological Organization, which seems to have the most stable API.
 
 ### Begin Displaying the Weather
 
@@ -29,13 +29,13 @@ Disconnect your Kindle from your computer and open KUAL. The installer will have
 
 ### Stop Displaying the Weather
 
-To exit weather mode, you must reboot your Kindle. Perform whatever steps are necessary for your device; on my Kindle 4, this requires pressing and holding the power button for several seconds. Once your Kindle has rebooted, open KUAL and choose "Remove from Crontab" from the Weather menu. This will prevent your Kindle from interrupting you every hour trying to display the weather. After this, you can use your Kindle as norma.
+To exit weather mode, you must reboot your Kindle. Perform whatever steps are necessary for your device; on my Kindle 4, this requires pressing and holding the power button for several seconds. Once your Kindle has rebooted, open KUAL and choose "Remove from Crontab" from the Weather menu. This will prevent your Kindle from interrupting you every hour trying to display the weather. After this, you can use your Kindle as normal.
 
 ### Uninstallation
 
 1. Download the latest version of the appropriate `Update_weather_{device abbreviation}_uninstall.bin` uninstaller from the [releases page](https://github.com/scolby33/weather_kindle/releases) of this repo.
 2. Transfer the uninstaller to your Kindle via USB. Place it in the `mrpackages` directory at the root of your Kindle.
-3. Run hte uninstaller using the MobileRead Package Installer (MRPI) using the "Install MR Packages" option in KUAL. Even though this option is called "install," if you loaded the uninstaller to your Kindle, the uninstallation process will take place.
+3. Run the uninstaller using the MobileRead Package Installer (MRPI) using the "Install MR Packages" option in KUAL. Even though this option is called "install," if you loaded the uninstaller to your Kindle, the uninstallation process will take place.
 
 ## History and Current Status
 
