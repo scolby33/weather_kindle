@@ -601,7 +601,7 @@ def main(argv: List[str]) -> Optional[int]:
         city_id_str = city_id_str.strip()
 
         if city_id_str.isnumeric():
-            city_id = cast(CityID, int(city_id))
+            city_id = cast(CityID, int(city_id_str))
 
             logger.info('WMO: "%s"', city_id)
             weather_getter = WMOGetter(city_id)
