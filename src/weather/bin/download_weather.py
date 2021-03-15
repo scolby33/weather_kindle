@@ -13,7 +13,7 @@ Options:
     -h --help       Show this screen.
     --version       Show version.
     -r, --rotated   Rotate the output image 180 degrees.
-    -m, --metric    Output with metric units. (AccuWeather only.)
+    -m, --metric    Output with metric units. (AccuWeather and WMO only.)
     -t <template>, --template <template>   Template file. [default: -]
     -k, --key       AccuWeather API key.
 
@@ -460,7 +460,7 @@ class WMOGetter(WeatherGetter):
     }
 
     def __init__(self, location: CityID, *args, **kwargs):
-        self._weather_data: Optional[dict] = None
+        self._weather_data: Optional[Dict] = None
 
         super().__init__(location, *args, **kwargs)
 
