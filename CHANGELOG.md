@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.3 <7 August 2023>
+
+- Add outputs for Paperwhite 1 ([#11](https://github.com/scolby33/weather_kindle/issues/11))
+
 ## 1.0.2 <15 March 2021>
 
 - Fix WMO `--metric` option, which didn't get merged last time because I forgot to push a branch ([#2](https://github.com/scolby33/weather_kindle/issues/2), [#6](https://github.com/scolby33/weather_kindle/pulls/6))
