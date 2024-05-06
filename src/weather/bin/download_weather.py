@@ -245,6 +245,7 @@ class WeatherGovGetter(WeatherGetter):
                 PurePosixPath(urllib.parse.urlsplit(elem.text).path).stem.rstrip(
                     "0123456789"
                 )
+                if elem.text else ""
                 for elem in self._weather.findall(".//icon-link")
             )
         return self._icons
