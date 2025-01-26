@@ -1,5 +1,7 @@
 .PHONY: all clean distclean
 
+METADATA_FLAGS := -xPackageName=weather_kindle -xPackageVersion=$(shell git describe --tags --dirty --broken) -xPackageAuthor=scolby33 -xPackageMaintainer=scolby33 -X
+
 DISTDIR := dist
 
 UPDATE_DEPS = $(shell find src/extensions src/weather -path '__pycache__' -prune -o ! -name '*.pyc' ! -name '.DS_Store' ! -name '*.swp')
@@ -13,16 +15,16 @@ all: \
 	dist/Update_weather_pw2_and_up_install.bin dist/Update_weather_pw2_and_up_uninstall.bin
 
 dist/Update_weather_touch_pw_install.bin: src/install.sh src/libotautils src/weather.tar.xz src/xzdec | $(DISTDIR)
-	cd src && kindletool create ota2 $(OLD_DEVICES) $(notdir $^) ../$@
+	cd src && kindletool create ota2 $(METADATA_FLAGS) $(OLD_DEVICES) $(notdir $^) ../$@
 
 dist/Update_weather_touch_pw_uninstall.bin: src/uninstall.sh src/libotautils | $(DISTDIR)
-	cd src && kindletool create ota2 $(OLD_DEVICES) $(notdir $^) ../$@
+	cd src && kindletool create ota2 $(METADATA_FLAGS) $(OLD_DEVICES) $(notdir $^) ../$@
 
 dist/Update_weather_pw2_and_up_install.bin: src/install.sh src/libotautils src/weather.tar.xz src/xzdec | $(DISTDIR)
-	cd src && kindletool create ota2 $(NEW_DEVICES) $(notdir $^) ../$@
+	cd src && kindletool create ota2 $(METADATA_FLAGS) $(NEW_DEVICES) $(notdir $^) ../$@
 
 dist/Update_weather_pw2_and_up_uninstall.bin: src/uninstall.sh src/libotautils | $(DISTDIR)
-	cd src && kindletool create ota2 $(NEW_DEVICES) $(notdir $^) ../$@
+	cd src && kindletool create ota2 $(METADATA_FLAGS) $(NEW_DEVICES) $(notdir $^) ../$@
 
 src/weather.tar.xz: $(UPDATE_DEPS)
 	tar --create --xz --directory=src --exclude '*.pyc' --exclude '__pycache__' --verbose --file=$@ weather extensions
